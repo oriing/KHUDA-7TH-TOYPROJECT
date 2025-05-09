@@ -50,16 +50,16 @@ async def google(item: Google, db: Session = Depends(get_db)):
             data.last_login = datetime.datetime.now()
             db.commit()
 
-            ## 세션 생성
-            session = models.SessionDB(session_id=str(uuid4()), google_id=data.google_id)
-            db.add(session)
-            db.commit()
+        ## 세션 생성
+        session = models.SessionDB(session_id=str(uuid4()), google_id=data.google_id)
+        db.add(session)
+        db.commit()
 
-            return JSONResponse({
-                "session_token": session.session_id,
-                "display_name": data.display_name,
-                "study_level" : data.study_level
-            })
+        return JSONResponse({
+            "session_token": session.session_id,
+            "display_name": data.display_name,
+            "study_level" : data.study_level
+        })
     
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid token")

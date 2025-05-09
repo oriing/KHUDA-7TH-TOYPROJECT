@@ -78,6 +78,7 @@ async def root(item: RecommendationsSuccessForm, db: Session = Depends(get_db)):
                     "item_id": row.question_id,
                     "rating":  (0 if row.correct else 1),
                 })
+            log_data_query = log_data_query[::-1]
             data_questions = requests.post(f"{GET_URL}/api/recommendation/initial", json={"items": log_data_query})
 
         else:
@@ -88,6 +89,7 @@ async def root(item: RecommendationsSuccessForm, db: Session = Depends(get_db)):
                     "rating":  (0 if row.correct else 1),
                     "timestamp": int(row.created_at.timestamp())
                 })
+            log_data_query = log_data_query[::-1]
             data_questions = requests.post(f"{GET_URL}/api/recommendation/subsequent", json={"items": log_data_query})
         
         jsondata = data_questions.json()
